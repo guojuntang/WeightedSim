@@ -21,6 +21,10 @@ public class PrivacyProtocolHelperTest {
             0,1,1,1,0,1,0
     };
 
+    private static final boolean[] DLESSResultVector = {
+            false,true,false,false,false,true,false
+    };
+
     private static final int[][] DWITHINMessageVector = {
             {56, 65, 2, 2, 30, -100, 20, -100, -1, -30},
             {23, 65 , 90, 18, 140, -10, -10, -10, 20, 100},
@@ -70,7 +74,7 @@ public class PrivacyProtocolHelperTest {
 
 
     @Test
-    public void DLESSETest(){
+    public void DLESSTest(){
 
         SHECipher E_m1;
         SHECipher E_m2 ;
@@ -82,7 +86,7 @@ public class PrivacyProtocolHelperTest {
         SHECipher E_mins_1 = SymHomEnc.enc(-1, sk);
 
         BigInteger[][] ran_list = getRandomNumberVector(SLESSEResultVector.length);
-        int[] result_list = new int[SLESSEResultVector.length];
+        boolean[] result_list = new boolean[DLESSResultVector.length];
 
 
         // coin_flip = true
@@ -90,26 +94,26 @@ public class PrivacyProtocolHelperTest {
             E_m1 = SymHomEnc.enc(SLESSEMessageVector[0][i], sk);
             E_m2 = SymHomEnc.enc(SLESSEMessageVector[1][i], sk);
 
-            p1_result = PrivacyProtocolHelper.DLESSEPhrase1(E_m1, E_m2, E_mins_1, ran_list[0][i], ran_list[1][i], true,pb);
-            p2_result = PrivacyProtocolHelper.DLESSEPhrase2(p1_result, sk);
-            p3_result = PrivacyProtocolHelper.DLESSEPhrase3(p2_result, E_mins_1, true, pb);
+            p1_result = PrivacyProtocolHelper.DLESSPhrase1(E_m1, E_m2, E_mins_1, ran_list[0][i], ran_list[1][i], true,pb);
+            p2_result = PrivacyProtocolHelper.DLESSPhrase2(p1_result, sk);
+            p3_result = PrivacyProtocolHelper.DLESSPhrase3(p2_result, true);
 
-            result_list[i] = (p3_result)? 1 : 0;
+            result_list[i] = p3_result;
         }
-        assertArrayEquals(SLESSEResultVector, result_list);
+        assertArrayEquals(DLESSResultVector, result_list);
 
         // coin_flip = false
         for (int i = 0; i < SLESSEMessageVector.length; i++) {
             E_m1 = SymHomEnc.enc(SLESSEMessageVector[0][i], sk);
             E_m2 = SymHomEnc.enc(SLESSEMessageVector[1][i], sk);
 
-            p1_result = PrivacyProtocolHelper.DLESSEPhrase1(E_m1, E_m2, E_mins_1, ran_list[0][i], ran_list[1][i], false,pb);
-            p2_result = PrivacyProtocolHelper.DLESSEPhrase2(p1_result, sk);
-            p3_result = PrivacyProtocolHelper.DLESSEPhrase3(p2_result, E_mins_1, false, pb);
+            p1_result = PrivacyProtocolHelper.DLESSPhrase1(E_m1, E_m2, E_mins_1, ran_list[0][i], ran_list[1][i], false,pb);
+            p2_result = PrivacyProtocolHelper.DLESSPhrase2(p1_result, sk);
+            p3_result = PrivacyProtocolHelper.DLESSPhrase3(p2_result, false);
 
-            result_list[i] = (p3_result)? 1 : 0;
+            result_list[i] = p3_result;
         }
-        assertArrayEquals(SLESSEResultVector, result_list);
+        assertArrayEquals(DLESSResultVector, result_list);
     }
 
     @Test
