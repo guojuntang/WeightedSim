@@ -2,10 +2,15 @@ package com.github.weightedsim.privacyprotocol;
 
 import com.github.SymHomEnc.SHECipher;
 import com.github.SymHomEnc.SHEPublicParameter;
+import com.github.weightedsim.entities.OutsourceServer;
 
 public class OutsourceServerDWITHINHandler extends OutsourceServerProtocolHandler{
     public OutsourceServerDWITHINHandler(SHEPublicParameter pb, SHECipher E_mins_1){
         super(pb, E_mins_1);
+    }
+
+    public OutsourceServerDWITHINHandler(OutsourceServer s){
+        super(s.getPb(), s.getE_mins_1());
     }
 
     public SHECipher phrase1(SHECipher E_m1, SHECipher E_m2, SHECipher E_m3){

@@ -1,6 +1,7 @@
-package com.github.weightedsim.privacyprotocol;
+package com.github.weightedsim;
 
 import com.github.SymHomEnc.*;
+import com.github.weightedsim.privacyprotocol.PrivacyProtocolHelper;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

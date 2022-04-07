@@ -1,8 +1,11 @@
 package com.github.weightedsim.util;
 
 import java.math.BigInteger;
+import com.github.weightedsim.util.PivotUtil;
 
 public class DataUtil {
+    final static double EPSILON = 0.0000001d;
+
     private DataUtil(){
         // no instance
     }
@@ -14,6 +17,10 @@ public class DataUtil {
 
         if (d != b.length || d != w.length){
             throw new RuntimeException("WeightedDis: different length.");
+        }
+        // sumDouble(w) != 1
+        if (Math.abs(1.0 - PivotUtil.sumDouble(w)) > EPSILON){
+            throw new RuntimeException("WeightedDis: weight vector error");
         }
 
         for(int i = 0; i < d; i++) {
