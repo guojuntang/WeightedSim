@@ -23,6 +23,14 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.davidmoten</groupId>
+            <artifactId>rtree-multi</artifactId>
+            <version>0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/rtree-multi.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
