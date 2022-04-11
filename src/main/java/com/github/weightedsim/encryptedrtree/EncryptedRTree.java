@@ -1,18 +1,13 @@
 package com.github.weightedsim.encryptedrtree;
 
-import com.github.SymHomEnc.SHEParameters;
 import com.github.SymHomEnc.SHEPrivateKey;
-import com.github.SymHomEnc.SHEPublicParameter;
 import com.github.davidmoten.rtreemulti.*;
 import com.github.davidmoten.rtreemulti.geometry.Geometry;
-import com.github.davidmoten.rtreemulti.geometry.Point;
-import com.github.davidmoten.rtreemulti.geometry.Rectangle;
 import com.github.weightedsim.encryptedrtree.geometry.EncryptedRectangle;
 import com.github.weightedsim.privacyprotocol.DLESSProtocol;
 import com.github.weightedsim.privacyprotocol.DWITHINProtocol;
 import javafx.util.Pair;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class EncryptedRTree<T> {
@@ -25,7 +20,7 @@ public class EncryptedRTree<T> {
         return root;
     }
 
-    public EncryptedRTree(RTree rTree, SHEPrivateKey sk){
+    public EncryptedRTree(RTree<T, ?> rTree, SHEPrivateKey sk){
         buildTree(rTree, sk);
     }
 
@@ -86,7 +81,7 @@ public class EncryptedRTree<T> {
                 size = leaf.entries().size();
                 for (int i = 0; i < size; i++) {
                     // create encryptedLeaf and bind to cur_build
-                    ((EncryptedNonLeaf)cur_build).addChild(new EncryptedLeaf<T>(leaf.entry(i).value(), leaf.entry(i), sk));
+                    ((EncryptedNonLeaf)cur_build).addChild(new EncryptedLeaf<>(leaf.entry(i).value(), leaf.entry(i), sk));
                 }
             }
             if (parent != null){
