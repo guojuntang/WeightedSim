@@ -7,16 +7,18 @@ import com.github.davidmoten.rtreemulti.*;
 import com.github.davidmoten.rtreemulti.geometry.Geometry;
 import com.github.davidmoten.rtreemulti.geometry.Point;
 import com.github.davidmoten.rtreemulti.geometry.Rectangle;
+import com.github.weightedsim.encryptedrtree.geometry.EncryptedRectangle;
+import com.github.weightedsim.privacyprotocol.DLESSProtocol;
+import com.github.weightedsim.privacyprotocol.DWITHINProtocol;
 import javafx.util.Pair;
 
 import java.lang.reflect.Type;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Stack;
+import java.util.*;
 
-public class EncryptedRTree {
+public class EncryptedRTree<T> {
     // current node and the encrypted parent
-    private final Stack<Pair<Node, EncryptedNode>> stack = new Stack<>();
+    private final Stack<Pair<Node<T, ?>, EncryptedNode>> stack = new Stack<>();
+    private final Queue<EncryptedNode> queue = new LinkedList<>();
     private EncryptedNode root;
 
     public EncryptedNode getRoot() {
@@ -27,14 +29,41 @@ public class EncryptedRTree {
         buildTree(rTree, sk);
     }
 
+    public List<EncryptedLeaf<T>> search(EncryptedRectangle r, DLESSProtocol dless, DWITHINProtocol dwithin){
+        List<EncryptedLeaf<T>> result = new ArrayList<>();
+        EncryptedNode node;
+        EncryptedNonLeaf nonLeaf;
+        int size;
+        queue.add(root);
+        while (!queue.isEmpty()){
+            node = queue.poll();
+            // leaf node, check if it is inside the rectangle
+            if (node.isLeaf()){
+                if (node.test(r, dwithin)){
+                    result.add((EncryptedLeaf<T>) node);
+                }
+            }else{
+                if (node.test(r, dless)){
+                    nonLeaf = (EncryptedNonLeaf) node;
+                    size = nonLeaf.getChildren().size();
+                    for (int i = 0; i < size; i++) {
+                        queue.add(nonLeaf.getChild(i));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
     // built by dfs
-    private void buildTree(RTree<?, ? extends Geometry> rTree, SHEPrivateKey sk){
-        Node<?, ? extends Geometry> rRoot = rTree.root().get();
+    private void buildTree(RTree<T, ? extends Geometry> rTree, SHEPrivateKey sk){
+        Node<T, ? extends Geometry> rRoot = rTree.root().get();
         stack.push(new Pair<>(rRoot, null));
-        NonLeaf nonLeaf;
-        Leaf leaf;
-        Node node;
-        Pair<Node, EncryptedNode> current;
+        NonLeaf<T, ?> nonLeaf;
+        Leaf<T, ?> leaf;
+        Node<T, ?> node;
+        Pair<Node<T, ?>, EncryptedNode> current;
         EncryptedNode parent;
         EncryptedNode cur_build;
         int size;
@@ -46,18 +75,18 @@ public class EncryptedRTree {
             cur_build = new EncryptedNonLeaf(node, sk);
             if (!node.isLeaf()){
                 // add the next nodes to the stack
-                nonLeaf = (NonLeaf) node;
+                nonLeaf = (NonLeaf<T, ?>) node;
                 size = nonLeaf.children().size();
                 for (int i = size - 1; i >= 0 ; i--) {
                     stack.push(new Pair<>(nonLeaf.child(i), cur_build));
                 }
             }else {
                 // build leaf, actually the encryptedLeaf nodes are entries in multi-rtree
-                leaf = (Leaf) node;
+                leaf = (Leaf<T, ?>) node;
                 size = leaf.entries().size();
                 for (int i = 0; i < size; i++) {
                     // create encryptedLeaf and bind to cur_build
-                    ((EncryptedNonLeaf)cur_build).addChild(new EncryptedLeaf<>(leaf.entry(i).value(), leaf.entry(i), sk));
+                    ((EncryptedNonLeaf)cur_build).addChild(new EncryptedLeaf<T>(leaf.entry(i).value(), leaf.entry(i), sk));
                 }
             }
             if (parent != null){

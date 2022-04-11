@@ -98,7 +98,7 @@ public class BuildTreeTest {
                 .add(10, Point.create(97, 125));
 
 
-        EncryptedRTree encryptedRTree = new EncryptedRTree(tree, sk);
+        EncryptedRTree<Integer> encryptedRTree = new EncryptedRTree(tree, sk);
         testHelper(tree, encryptedRTree);
     }
 
@@ -118,7 +118,7 @@ public class BuildTreeTest {
                 .add(10, Point.create(97, 125));
 
 
-        EncryptedRTree encryptedRTree = new EncryptedRTree(tree, sk);
+        EncryptedRTree<Integer> encryptedRTree = new EncryptedRTree(tree, sk);
         testHelper(tree, encryptedRTree);
     }
 }
