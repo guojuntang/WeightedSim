@@ -9,6 +9,9 @@ import com.github.weightedsim.entities.OutsourceServer;
 import com.github.weightedsim.privacyprotocol.DLESSProtocol;
 import com.github.weightedsim.privacyprotocol.DWITHINProtocol;
 import org.junit.Test;
+
+import java.math.BigInteger;
+
 import static org.junit.Assert.*;
 
 public class GeometryTest {
@@ -16,6 +19,7 @@ public class GeometryTest {
     private static final SHEPrivateKey sk = param.getSHEPrivateKey();
     private static final SHEPublicParameter pb = param.getSHEPublicParameter();
     private static final SHECipher E_mins_1= SymHomEnc.enc(-1, sk);
+    private static final SHEPublicKey pk = param.getSHEPublicKey();
     private static final OutsourceServer s1 = new OutsourceServer(pb, E_mins_1);
     private static final AssistServer s2 = new AssistServer(sk);
     private static final DLESSProtocol less_protocol = new DLESSProtocol(s1, s2);
@@ -148,6 +152,30 @@ public class GeometryTest {
         int[] x = {9, 30};
 
         EncryptedRectangle r = new EncryptedRectangle(maxes, mins, sk);
+        EncryptedPoint p = new EncryptedPoint(x, sk);
+        assertFalse(p.intersect(r, within_protocol));
+    }
+
+    @Test
+    public void testCreateByDouble() {
+        double[] maxes = {30.0, 40.0};
+        double[] mins = {10.0, 20.0};
+
+        double[] x = {9.0, 30.0};
+
+        EncryptedRectangle r = new EncryptedRectangle(maxes, mins, sk);
+        EncryptedPoint p = new EncryptedPoint(x, sk);
+        assertFalse(p.intersect(r, within_protocol));
+    }
+
+    @Test
+    public void testCreateByBigInt() {
+        BigInteger[] maxes = {BigInteger.valueOf(30), BigInteger.valueOf(40)};
+        BigInteger[] mins = {BigInteger.valueOf(10), BigInteger.valueOf(20)};
+
+        double[] x = {9.0, 30.0};
+
+        EncryptedRectangle r = new EncryptedRectangle(maxes, mins, pk);
         EncryptedPoint p = new EncryptedPoint(x, sk);
         assertFalse(p.intersect(r, within_protocol));
     }

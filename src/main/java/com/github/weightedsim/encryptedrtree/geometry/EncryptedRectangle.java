@@ -2,9 +2,12 @@ package com.github.weightedsim.encryptedrtree.geometry;
 
 import com.github.SymHomEnc.SHECipher;
 import com.github.SymHomEnc.SHEPrivateKey;
+import com.github.SymHomEnc.SHEPublicKey;
 import com.github.SymHomEnc.SymHomEnc;
 import com.github.weightedsim.encryptedrtree.EncryptedNonLeaf;
 import com.github.weightedsim.privacyprotocol.*;
+
+import java.math.BigInteger;
 
 
 public class EncryptedRectangle implements EncryptedGeometry {
@@ -28,6 +31,21 @@ public class EncryptedRectangle implements EncryptedGeometry {
         for (int i = 0; i < maxes.length; i++) {
             maxes_ciphers[i] = SymHomEnc.enc((int)maxes[i], sk);
             mins_ciphers[i] = SymHomEnc.enc((int)mins[i], sk);
+        }
+        this.maxes = maxes_ciphers;
+        this.mins = mins_ciphers;
+    }
+
+    public  EncryptedRectangle(BigInteger[] maxes, BigInteger[] mins, SHEPublicKey pk){
+        if (mins.length != maxes.length)
+            throw new RuntimeException("Encrypted Rectangle: length error.");
+
+        SHECipher[] maxes_ciphers = new SHECipher[maxes.length];
+        SHECipher[] mins_ciphers = new SHECipher[mins.length];
+
+        for (int i = 0; i < maxes.length; i++) {
+            maxes_ciphers[i] = SymHomEnc.enc(maxes[i], pk);
+            mins_ciphers[i] = SymHomEnc.enc(mins[i], pk);
         }
         this.maxes = maxes_ciphers;
         this.mins = mins_ciphers;

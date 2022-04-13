@@ -53,7 +53,7 @@ public class DataUtil {
     }
 
     public static BigInteger doubleToBigInt(double a, int magnification){
-        return BigInteger.valueOf((long)(a * magnification));
+        return BigInteger.valueOf(Math.round(a * magnification));
     }
 
     public static double bigIntToDouble(BigInteger a, int magnification){
