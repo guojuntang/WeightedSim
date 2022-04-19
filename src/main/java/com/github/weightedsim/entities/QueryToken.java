@@ -22,14 +22,14 @@ public class QueryToken {
         return w;
     }
 
-    public QueryToken(double[] q, double[] w, double tau, int dimension){
-        if (q.length != w.length && q.length != dimension){
+    public QueryToken(double[] q, double[] w, double tau){
+        this.dimension = q.length;
+        if (q.length != w.length){
             throw new RuntimeException("Query Token: length error");
         }
         this.q = q;
         this.w = w;
         this.tau = tau;
-        this.dimension = dimension;
     }
 
 }

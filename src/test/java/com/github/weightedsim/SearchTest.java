@@ -30,6 +30,32 @@ public class SearchTest {
 
 
     @Test
+    public void searchTest3(){
+        RTree<Integer, Point> tree = RTree.create();
+        tree = tree.add(0, Point.create(59.0, 91.0))
+                .add(1, Point.create(86.0, 14.0))
+                .add(2, Point.create(36.0, 15.0))
+                .add(3, Point.create(57.0, 36.0))
+                .add(4, Point.create(20.0, 20.0));
+        EncryptedRTree<Integer> encryptedRTree = new EncryptedRTree<Integer>(tree, sk);
+        int[] maxes = {40, 25};
+        int[] mins = {20, 5};
+        EncryptedRectangle encryptedRectangle = new EncryptedRectangle(maxes, mins, sk);
+        List<EncryptedLeaf<Integer>> result = encryptedRTree.search(encryptedRectangle, less_protocol, within_protocol);
+        Set<Integer> actual = new HashSet<>();
+        Set<Integer> expected = new HashSet<>();
+        //expected results
+        expected.add(2);
+        expected.add(4);
+
+        for (int i = 0; i < result.size(); i++) {
+            actual.add(result.get(i).getValue());
+        }
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void searchTest1(){
         RTree<Integer, Point> tree = RTree.create();
         tree = tree.add(0, Point.create(59.0, 91.0))
@@ -80,4 +106,6 @@ public class SearchTest {
 
         assertEquals(expected, actual);
     }
+
+
 }
