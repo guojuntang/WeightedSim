@@ -11,8 +11,11 @@ import java.util.List;
 
 public class QueryUser {
     private SHEPublicKey pk;
-    public QueryUser(SHEPublicKey pk){
+    private List<double[]> pivots;
+
+    public QueryUser(SHEPublicKey pk, List<double[]> pivots){
         this.pk = pk;
+        this.pivots = pivots;
     }
 
     private boolean checkResult(RefinementResult r, SecretKey ssk){
@@ -33,6 +36,11 @@ public class QueryUser {
             result[i] = x_pi[i].subtract(gamma);
         }
         return result;
+    }
+
+    public EncryptedToken genEncryptedToken(QueryToken queryToken){
+        // TODO: adjust the interface of data magnification
+        return new EncryptedToken(queryToken, pivots, pk, 100, 100 ,1000) ;
     }
 
     public List<BigInteger[]> refinement(SecretKey ssk, List<RefinementResult> set){

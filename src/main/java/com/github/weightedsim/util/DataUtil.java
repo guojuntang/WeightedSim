@@ -1,11 +1,18 @@
 package com.github.weightedsim.util;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.SymHomEnc.SHECipher;
 import com.github.SymHomEnc.SHEPrivateKey;
 import com.github.SymHomEnc.SHEPublicParameter;
 import com.github.SymHomEnc.SymHomEnc;
+import com.github.davidmoten.rtreemulti.geometry.Point;
+import com.github.weightedsim.Main;
 import com.github.weightedsim.entities.EncryptedToken;
 import com.github.weightedsim.entities.QueryToken;
 import com.github.weightedsim.util.PivotUtil;
@@ -16,6 +23,40 @@ public class DataUtil {
     private DataUtil(){
         // no instance
     }
+
+    public static Point createPointFromPivots(List<double[]> pivots, double[] a, int magnification){
+        int size = pivots.size();
+        double[] indexes = new double[size];
+        for (int i = 0; i < size; i++) {
+            indexes[i] = negativeInf(pivots.get(i), a) * magnification;
+        }
+        return Point.create(indexes);
+    }
+
+    public static List<double[]> readCsvData(String filename){
+        try {
+            List<double[]> result = new ArrayList<>();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream(filename)));
+            String line;
+            int size;
+            String[] string_buffer;
+            while((line = bufferedReader.readLine()) != null){
+                string_buffer = line.split(",");
+                size = string_buffer.length;
+                double[] tmp = new double[size];
+                for (int i = 0; i < size; i++) {
+                    tmp[i] = Double.valueOf(string_buffer[i]);
+                }
+                result.add(tmp);
+            }
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
     public static boolean checkWeightedQuery(QueryToken queryToken, double[] a){
         double weightedDis = DataUtil.weightedDis(a, queryToken.getQ(), queryToken.getW());

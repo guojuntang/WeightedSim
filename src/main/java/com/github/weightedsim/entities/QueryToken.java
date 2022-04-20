@@ -28,6 +28,7 @@ public class QueryToken {
             throw new RuntimeException("Query Token: length error");
         }
         this.q = q;
+        // TODO: check summary is equal to 1
         this.w = w;
         this.tau = tau;
     }

@@ -3,15 +3,15 @@ package com.github.weightedsim.util;
 import com.github.weightedsim.util.DataUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PivotUtil {
     private PivotUtil(){
         // No instance
     }
 
-    public static ArrayList<double[]> choosePivots(ArrayList<double[]> dataList, int k) {
-
-        ArrayList<double[]> pivots = new ArrayList<double[]>();
+    public static List<double[]> choosePivots(List<double[]> dataList, int k) {
+        List<double[]> pivots = new ArrayList<double[]>();
         int n = dataList.size();
 
         // choose the first pivot
@@ -51,7 +51,7 @@ public class PivotUtil {
         return sum;
     }
 
-    public static int chooseOnePivot(ArrayList<double[]> dataList, ArrayList<double[]> pivots) {
+    public static int chooseOnePivot(List<double[]> dataList, List<double[]> pivots) {
 
         int index = 0;
         double dis = 0;
@@ -71,7 +71,7 @@ public class PivotUtil {
 
     }
 
-    public static double computeRecordPivotsDis(double[] record, ArrayList<double[]> pivots) {
+    public static double computeRecordPivotsDis(double[] record, List<double[]> pivots) {
 
         double dis = 0;
         int len = pivots.size();

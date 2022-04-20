@@ -27,7 +27,6 @@ public class RefinementTest {
     private static final SHECipher E_mins_1= SymHomEnc.enc(-1, sk);
     private static final OutsourceServer s1 = new OutsourceServer(pb, E_mins_1);
     private static final AssistServer s2 = new AssistServer(sk);
-    private static final QueryUser q1 = new QueryUser(pk);
     private static final DLESSProtocol less_protocol = new DLESSProtocol(s1, s2);
     private static final DWITHINProtocol within_protocol = new DWITHINProtocol(s1, s2);
     private static final SLESSEProtocol lesse_protocol = new SLESSEProtocol(s1, s2);
@@ -82,6 +81,8 @@ public class RefinementTest {
         List<double[]> pivots = new ArrayList<>();
         pivots.add(p1);
         pivots.add(p2);
+
+        QueryUser q1 = new QueryUser(pk, pivots);
 
         QueryToken queryToken = new QueryToken(q, w, tau);
 
