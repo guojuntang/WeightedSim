@@ -78,16 +78,13 @@ public class RefinementTest {
         double[] p1 = {60, 60, 60};
         double[] p2 = {15, 15, 60};
 
-        List<double[]> pivots = new ArrayList<>();
-        pivots.add(p1);
-        pivots.add(p2);
 
-        QueryUser q1 = new QueryUser(pk, pivots);
+        QueryUser q1 = new QueryUser(pk);
 
         QueryToken queryToken = new QueryToken(q, w, tau);
 
         //rectangle maxes = {40, 25}, mins = {20, 5}
-        EncryptedToken encryptedToken = new EncryptedToken(queryToken, pivots, pk, 1, 100 ,10) ;
+        EncryptedToken encryptedToken = new EncryptedToken(queryToken, pk, 1, 100 ,10) ;
 
         s1.setUpOutsource(null, less_protocol, within_protocol, lesse_protocol);
 

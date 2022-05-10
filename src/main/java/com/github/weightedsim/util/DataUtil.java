@@ -33,6 +33,13 @@ public class DataUtil {
         return Point.create(indexes);
     }
 
+    public static Point createPointFromData(double[] a, int magnification){
+        for (int i = 0; i < a.length; i++) {
+            a[i] = a[i] * magnification;
+        }
+        return Point.create(a);
+    }
+
     public static List<double[]> readCsvData(String filename){
         try {
             List<double[]> result = new ArrayList<>();

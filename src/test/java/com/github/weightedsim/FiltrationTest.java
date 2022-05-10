@@ -57,19 +57,16 @@ public class FiltrationTest {
         double[] p1 = {60, 60};
         double[] p2 = {15, 15};
 
-        List<double[]> pivots = new ArrayList<>();
-        pivots.add(p1);
-        pivots.add(p2);
 
         QueryToken queryToken = new QueryToken(q, w, tau);
 
         //rectangle maxes = {40, 25}, mins = {20, 5}
-        EncryptedToken encryptedToken = new EncryptedToken(queryToken, pivots, pk, 1, 1 ,1) ;
+        EncryptedToken encryptedToken = new EncryptedToken(queryToken, pk, 1, 1 ,1) ;
 
         Set<SHECipher> actual = new HashSet<>();
         Set<SHECipher> expected = new HashSet<>();
 
-        expected.add(c2);
+        //expected.add(c2);
         expected.add(c4);
 
         List<EncryptedLeaf<SHECipher>> result = s1.filtration(encryptedToken);

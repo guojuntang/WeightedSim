@@ -35,7 +35,6 @@ public class Main {
     private static DLESSProtocol less_protocol;
     private static DWITHINProtocol within_protocol;
     private static SLESSEProtocol lesse_protocol;
-    private static List<double[]> pivots;
     private static List<double[]> dataset;
     private static QueryUser q1;
     private static List<SHECipher[]> cipher_list;
@@ -55,18 +54,16 @@ public class Main {
         lesse_protocol = new SLESSEProtocol(s1, s2);
         dataset = DataUtil.readCsvData(filename);
         cipher_list = new ArrayList<>();
-        pivots = PivotUtil.choosePivots(dataset, k);
-        q1 = new QueryUser(pk, pivots);
+        q1 = new QueryUser(pk);
     }
 
     public static RTree<SHECipher[], Point> buildUpRtreeIndexAndEncryptData(){
-        int dimension = pivots.size();
-        RTree<SHECipher[], Point> tree = RTree.dimensions(dimension).maxChildren(1000).star().create();
+        int dimension = dataset.get(0).length;
+        RTree<SHECipher[], Point> tree = RTree.dimensions(dimension).maxChildren(100).star().create();
         List<Entry<SHECipher[], Point>> entries = new ArrayList<>();
         for (double[] record:
              dataset) {
             SHECipher[] cipher = DataUtil.convertAndEncryptVector(record, dataMag.getData_mag(), sk);
-            //entries.add(Entry.entry(cipher, DataUtil.createPointFromPivots(pivots, record, 100)));
             entries.add(Entry.entry(cipher, DataUtil.createPointFromData(record, dataMag.getData_mag())));
             cipher_list.add(cipher);
         }
@@ -147,16 +144,16 @@ public class Main {
 
         s1.setUpOutsource(encryptedRTree, less_protocol, within_protocol, lesse_protocol);
 
-        double[] w = {0.1, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.05, 0.15, 0.1};
+        //double[] w = {0.1, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.05, 0.15, 0.1};
         //double[] w = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.05, 0.05};
-        //double[] w = {0.3, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
+        double[] w = {0.3, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
        // double[] w = {0.3, 0.3, 0.2, 0.2};
 
 
         // Weighted Distance Similarity Query
         // Generate encrypted token
         QueryToken queryToken = new QueryToken(dataset.get(100), w, 5.02);
-        EncryptedToken encryptedToken = q1.genEncryptedToken(queryToken,dataMag);
+        EncryptedToken encryptedToken = q1.genEncryptedToken(queryToken, dataMag);
 
 
         verification(queryToken);

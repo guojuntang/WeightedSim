@@ -59,12 +59,9 @@ public class PrivacyProtocolTest {
         double[] p2 = {60.50, 60.99, 60.89, 60.79};
 
 
-        List<double[]> pivots = new ArrayList<>();
-        pivots.add(p1);
-        pivots.add(p2);
 
         QueryToken queryToken = new QueryToken(q, w, tau);
-        EncryptedToken encryptedToken = new EncryptedToken(queryToken, pivots, pk, 100, 100, 1000);
+        EncryptedToken encryptedToken = new EncryptedToken(queryToken,  pk, 100, 100, 1000);
 
         SHECipher[] c1 = DataUtil.convertAndEncryptVector(p1, 100, sk);
         SHECipher[] c2 = DataUtil.convertAndEncryptVector(p2, 100, sk);

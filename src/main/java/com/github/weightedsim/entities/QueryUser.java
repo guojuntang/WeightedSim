@@ -12,11 +12,9 @@ import java.util.List;
 
 public class QueryUser {
     private SHEPublicKey pk;
-    private List<double[]> pivots;
 
-    public QueryUser(SHEPublicKey pk, List<double[]> pivots){
+    public QueryUser(SHEPublicKey pk){
         this.pk = pk;
-        this.pivots = pivots;
     }
 
     private boolean checkResult(RefinementResult r, SecretKey ssk){
@@ -40,7 +38,7 @@ public class QueryUser {
     }
 
     public EncryptedToken genEncryptedToken(QueryToken queryToken, DataMag dataMag){
-        return new EncryptedToken(queryToken, pivots, pk, dataMag.getData_mag(), dataMag.getW_mag(), dataMag.getTau_mag()) ;
+        return new EncryptedToken(queryToken,  pk, dataMag.getData_mag(), dataMag.getW_mag(), dataMag.getTau_mag()) ;
     }
 
     public List<BigInteger[]> refinement(SecretKey ssk, List<RefinementResult> set){
