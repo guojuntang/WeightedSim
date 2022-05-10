@@ -3,6 +3,7 @@ package com.github.weightedsim.entities;
 import com.github.SymHomEnc.SHEPublicKey;
 import com.github.SymHomEnc.SHEPublicParameter;
 import com.github.weightedsim.util.AES;
+import com.github.weightedsim.util.DataMag;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -38,9 +39,8 @@ public class QueryUser {
         return result;
     }
 
-    public EncryptedToken genEncryptedToken(QueryToken queryToken){
-        // TODO: adjust the interface of data magnification
-        return new EncryptedToken(queryToken, pivots, pk, 100, 100 ,1000) ;
+    public EncryptedToken genEncryptedToken(QueryToken queryToken, DataMag dataMag){
+        return new EncryptedToken(queryToken, pivots, pk, dataMag.getData_mag(), dataMag.getW_mag(), dataMag.getTau_mag()) ;
     }
 
     public List<BigInteger[]> refinement(SecretKey ssk, List<RefinementResult> set){

@@ -49,6 +49,7 @@ public class EncryptedToken {
         BigInteger[] mins =  new BigInteger[rectangle_dimension];
         for (int i = 0; i <rectangle_dimension ; i++) {
             mins[i] = DataUtil.doubleToBigInt(DataUtil.negativeInf(q, pivots.get(i)) - tau, data_mag);
+            // TODO: fix bug negative margin
             maxes[i] = DataUtil.doubleToBigInt(DataUtil.negativeInf(q, pivots.get(i)) + tau, data_mag);
         }
         return new EncryptedRectangle(maxes, mins, pk);

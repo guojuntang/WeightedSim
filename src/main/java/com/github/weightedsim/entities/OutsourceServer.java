@@ -76,6 +76,19 @@ public class OutsourceServer<T> {
         return new Pair<>(b_pi, gamma_cipher);
     }
 
+    public List<RefinementCandidate> refinement_cipher(EncryptedToken token, List<SHECipher[]> candidate_set) {
+        List<RefinementCandidate> result = new ArrayList<>();
+        SHECipher result_bit;
+        SHECipher encryptedWeightedDis;
+        //Todo: multithreading
+        for (SHECipher[] x: candidate_set) {
+            encryptedWeightedDis = calEncryptedWeightedEuclideanDisSquare(x, token.getEncryptedQ(), token.getEncryptedW());
+            result_bit = slesseProtocol.run(encryptedWeightedDis, token.getEncryptedTauSquare());
+            result.add(new RefinementCandidate(maskEncryptedData(x, token.getSsk()), maskResultBit(result_bit, token.getSsk())));
+        }
+        return result;
+    }
+
     public List<RefinementCandidate> refinement(EncryptedToken token, List<EncryptedLeaf<SHECipher[]>> candidate_set){
         List<RefinementCandidate> result = new ArrayList<>();
         SHECipher result_bit;
