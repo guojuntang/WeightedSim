@@ -11,7 +11,7 @@ import com.github.weightedsim.privacyprotocol.DWITHINProtocol;
 import com.github.weightedsim.privacyprotocol.SLESSEProtocol;
 import com.github.weightedsim.util.AES;
 import com.github.weightedsim.util.DataUtil;
-import javafx.util.Pair;
+import com.github.weightedsim.util.Pair;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -55,7 +55,6 @@ public class OutsourceServer<T> {
         return DataUtil.calEncryptedWeightedEuclideanDis(x, q, w, E_mins_1, pb);
     }
 
-    // TODO: multithreading
     private Pair<SHECipher[], List<byte[]>> maskEncryptedData(SHECipher[] x, SecretKey aesKey){
         int size = x.length;
         SHECipher[] x_vector = new SHECipher[size];
@@ -80,7 +79,6 @@ public class OutsourceServer<T> {
         List<RefinementCandidate> result = new ArrayList<>();
         SHECipher result_bit;
         SHECipher encryptedWeightedDis;
-        //Todo: multithreading
         for (SHECipher[] x: candidate_set) {
             encryptedWeightedDis = calEncryptedWeightedEuclideanDisSquare(x, token.getEncryptedQ(), token.getEncryptedW());
             result_bit = slesseProtocol.run(encryptedWeightedDis, token.getEncryptedTauSquare());
@@ -93,7 +91,6 @@ public class OutsourceServer<T> {
         List<RefinementCandidate> result = new ArrayList<>();
         SHECipher result_bit;
         SHECipher encryptedWeightedDis;
-        //Todo: multithreading
         for (EncryptedLeaf<SHECipher[]> x: candidate_set) {
             encryptedWeightedDis = calEncryptedWeightedEuclideanDisSquare(x.getValue(), token.getEncryptedQ(), token.getEncryptedW());
             result_bit = slesseProtocol.run(encryptedWeightedDis, token.getEncryptedTauSquare());

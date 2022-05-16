@@ -1,7 +1,7 @@
 package com.github.weightedsim.entities;
 
 import com.github.SymHomEnc.SHECipher;
-import javafx.util.Pair;
+import com.github.weightedsim.util.Pair;
 
 import java.math.BigInteger;
 import java.util.List;

@@ -27,7 +27,7 @@ public class EncryptedToken {
         this.EncryptedQ = encryptedVectorHelper(len, token.getQ(), pk, data_mag);
         this.EncryptedW = encryptedVectorHelper(len, token.getW(), pk, w_mag);
         this.EncryptedTauSquare = encryptedTauHelper(token.getTau(), pk, tau_mag);
-        this.encryptedRectangle = encryptedRectangleHelper(token.getQ(), token.getTau(),  pk, data_mag);
+        this.encryptedRectangle = encryptedRectangleHelper(token.getQ(), token.getW(),token.getTau(),  pk, data_mag);
         this.ssk = secretKeyHelper(AES_KEY_SIZE);
     }
 
@@ -40,13 +40,14 @@ public class EncryptedToken {
         return SymHomEnc.hm_mul(a, a, pk.getPublicParameter());
     }
 
-    private static EncryptedRectangle encryptedRectangleHelper(double[] q, double tau,  SHEPublicKey pk, int data_mag){
+    private static EncryptedRectangle encryptedRectangleHelper(double[] q, double[] w, double tau,  SHEPublicKey pk, int data_mag){
         int rectangle_dimension = q.length;
         BigInteger[] maxes = new BigInteger[rectangle_dimension];
         BigInteger[] mins =  new BigInteger[rectangle_dimension];
         for (int i = 0; i <rectangle_dimension ; i++) {
-            mins[i] = DataUtil.doubleToBigInt(q[i] - tau, data_mag);
-            maxes[i] = DataUtil.doubleToBigInt(q[i] + tau, data_mag);
+            double tmp = tau/Math.sqrt(w[i]);
+            mins[i] = DataUtil.doubleToBigInt(q[i] - tmp, data_mag);
+            maxes[i] = DataUtil.doubleToBigInt(q[i] + tmp, data_mag);
         }
         return new EncryptedRectangle(maxes, mins, pk);
     }

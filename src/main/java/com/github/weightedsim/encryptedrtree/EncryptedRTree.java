@@ -6,7 +6,7 @@ import com.github.davidmoten.rtreemulti.geometry.Geometry;
 import com.github.weightedsim.encryptedrtree.geometry.EncryptedRectangle;
 import com.github.weightedsim.privacyprotocol.DLESSProtocol;
 import com.github.weightedsim.privacyprotocol.DWITHINProtocol;
-import javafx.util.Pair;
+import com.github.weightedsim.util.Pair;
 
 import java.util.*;
 

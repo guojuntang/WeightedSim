@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PivotUtil {
+    // The pivot is abandoned
     private PivotUtil(){
         // No instance
     }
