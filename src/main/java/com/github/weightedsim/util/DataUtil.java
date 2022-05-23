@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.github.SymHomEnc.SHECipher;
 import com.github.SymHomEnc.SHEPrivateKey;
@@ -34,35 +35,26 @@ public class DataUtil {
     }
 
     public static Point createPointFromData(double[] a, int magnification){
+        double[] tmp = new double[a.length];
         for (int i = 0; i < a.length; i++) {
-            a[i] = a[i] * magnification;
+            tmp[i] = a[i] * magnification;
         }
-        return Point.create(a);
+        return Point.create(tmp);
     }
 
-    public static List<double[]> readCsvData(String filename){
-        try {
-            List<double[]> result = new ArrayList<>();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream(filename)));
-            String line;
-            int size;
-            String[] string_buffer;
-            while((line = bufferedReader.readLine()) != null){
-                string_buffer = line.split(",");
-                size = string_buffer.length;
-                double[] tmp = new double[size];
-                for (int i = 0; i < size; i++) {
-                    tmp[i] = Double.valueOf(string_buffer[i]);
-                }
-                result.add(tmp);
-            }
-            return result;
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
 
+    public static double[] genWeighted(int d){
+        double a[] = new double[d];
+        Random random = new Random();
+        int sum = 100;
+        for (int i = d-1; i > 0; i--) {
+            int tmp = ((sum - 5 * i) > 0 )? random.nextInt(sum - 5 * i ) + 1 : 1;
+            a[i] = (double) tmp / 100.0;
+            sum = sum - tmp;
+        }
+        a[0] = (double) sum / 100.0;
+        return a;
+    }
 
 
     public static boolean checkWeightedQuery(QueryToken queryToken, double[] a){
