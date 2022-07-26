@@ -16,7 +16,6 @@ public class AssistServer {
         return sk;
     }
 
-    // TODO: multithreading
     public List<RefinementResult> refinement(List<RefinementCandidate> candidate){
         List<RefinementResult> result = new ArrayList<>();
         for (RefinementCandidate c:
